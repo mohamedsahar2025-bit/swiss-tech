@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#060A16">
+<title>Swiss Tech — Intelligent AI for Healthcare & Logistics</title>
+<meta name="description" content="Swiss Tech builds AI-powered software for clinics, healthcare providers and logistics operators.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#060A16;--bg2:#0A1022;--card:#0D1429;--line:rgba(148,170,255,.12);--line2:rgba(148,170,255,.22);
+  --text:#E8ECF8;--muted:#8E98B5;--dim:#5C6685;--accent:#5B8CFF;--accent2:#35E0C2;--red:#FF4D5E;
+  --serif:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --sans:"Manrope",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#060A16;--text:#E8ECF8}}
+:root[data-theme="dark"]{--bg:#060A16;--text:#E8ECF8}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-behavior:smooth;scroll-padding-top:calc(80px + env(safe-area-inset-top,0px))}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+img{max-width:100%}
+:focus-visible{outline:2px solid var(--accent2);outline-offset:3px;border-radius:4px}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+section{padding:120px 0;position:relative}
+h1,h2,h3{font-weight:400;margin:0}
+h2{font-family:var(--serif);font-size:clamp(34px,5vw,58px);line-height:1.05;letter-spacing:-.01em;max-width:20ch}
+.kicker{color:var(--accent2);font-size:14px;font-weight:600;margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.kicker::before{content:"";width:22px;height:1px;background:var(--accent2)}
+.lead{color:var(--muted);font-size:18px;max-width:62ch;margin:22px 0 0}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 24px;border-radius:999px;font-weight:600;font-size:15px;transition:transform .2s,background .2s,border-color .2s}
+.btn-primary{background:var(--text);color:var(--bg)}
+.btn-primary:hover{transform:translateY(-2px);background:#fff}
+.btn-ghost{border:1px solid var(--line2)}
+.btn-ghost:hover{border-color:var(--accent)}
+.skip{position:absolute;left:-999px;top:10px;background:var(--text);color:var(--bg);padding:8px 14px;z-index:200;border-radius:6px}
+.skip:focus{left:10px}
+
+/* Loader */
+#loader{position:fixed;inset:0;background:var(--bg);z-index:300;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity .6s,visibility .6s}
+#loader.done{opacity:0;visibility:hidden}
+#loader .logo{font-family:var(--serif);font-size:44px;letter-spacing:.04em}
+#loader .bar{width:180px;height:2px;background:var(--line);overflow:hidden;border-radius:2px}
+#loader .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+#loader small{color:var(--muted);font-size:13px}
+
+/* Nav */
+header{position:fixed;top:0;left:0;right:0;z-index:100;padding-top:env(safe-area-inset-top,0px);transition:background .3s,border-color .3s;border-bottom:1px solid transparent}
+header.scrolled{background:rgba(6,10,22,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:72px;gap:20px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px}
+.brand .mark{width:28px;height:28px;border-radius:7px;background:var(--red);display:grid;place-items:center}
+.brand .mark::before,.brand .mark::after{content:"";position:absolute;background:#fff;border-radius:1px}
+.brand .mark{position:relative}
+.brand .mark::before{width:14px;height:4px}
+.brand .mark::after{width:4px;height:14px}
+.links{display:flex;gap:26px;font-size:14px;color:var(--muted)}
+.links a:hover{color:var(--text)}
+.nav-cta{display:flex;gap:12px;align-items:center}
+.nav-cta .contact{font-size:14px;color:var(--muted)}
+.nav-cta .btn{padding:10px 18px;font-size:14px}
+.burger{display:none;background:none;border:1px solid var(--line2);color:var(--text);border-radius:10px;width:42px;height:42px;cursor:pointer;font-size:18px}
+.mobile-menu{display:none;flex-direction:column;padding:10px 24px 24px;gap:4px;background:rgba(6,10,22,.97);border-bottom:1px solid var(--line)}
+.mobile-menu a{padding:12px 0;border-bottom:1px solid var(--line);color:var(--muted)}
+.mobile-menu.open{display:flex}
+@media (max-width:1020px){.links,.nav-cta .contact{display:none}.burger{display:block}}
+@media (max-width:520px){.nav-cta .btn{display:none}}
+
+/* Hero */
+#hero{min-height:100vh;display:flex;align-items:center;padding:140px 0 90px;overflow:hidden}
+.grid-bg{position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse 70% 60% at 50% 40%,#000 30%,transparent 75%);-webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 40%,#000 30%,transparent 75%);opacity:.5}
+.glow{position:absolute;width:700px;height:700px;border-radius:50%;filter:blur(120px);opacity:.35;pointer-events:none}
+.glow.a{background:var(--accent);top:-240px;right:-160px}
+.glow.b{background:var(--accent2);bottom:-320px;left:-220px;opacity:.18}
+.hero-inner{position:relative;z-index:2}
+.live{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--line2);padding:7px 14px;border-radius:999px;font-size:13px;color:var(--muted);background:rgba(13,20,41,.6)}
+.live b{color:var(--accent2);display:flex;align-items:center;gap:6px;font-weight:600}
+.live b::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent2);box-shadow:0 0 0 0 var(--accent2);animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(53,224,194,.6)}100%{box-shadow:0 0 0 10px rgba(53,224,194,0)}}
+h1{font-family:var(--serif);font-size:clamp(44px,8vw,104px);line-height:.98;letter-spacing:-.02em;margin:28px 0 0;max-width:13ch}
+h1 .w{display:inline-block;opacity:0;transform:translateY(40%);filter:blur(8px);transition:opacity .8s,transform .8s,filter .8s}
+h1 .w.in{opacity:1;transform:none;filter:none}
+h1 .w.it{font-style:italic;color:#B9C8FF}
+.hero-sub{color:var(--muted);font-size:clamp(17px,2vw,20px);max-width:56ch;margin:28px 0 36px}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap}
+.pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin:80px 0 0;padding:0;list-style:none;border-top:1px solid var(--line)}
+.pillars li{padding:22px 20px 0 0;display:flex;flex-direction:column;font-size:14px;color:var(--muted)}
+.pillars b{color:var(--text);font-size:15px;font-weight:600;margin-bottom:4px}
+@media (max-width:760px){.pillars{grid-template-columns:1fr 1fr;row-gap:20px}}
+.chips{position:absolute;inset:0;pointer-events:none;z-index:1}
+.chip{position:absolute;font-size:12.5px;padding:8px 14px;border-radius:999px;background:rgba(13,20,41,.75);border:1px solid var(--line2);color:var(--muted);backdrop-filter:blur(8px);animation:float 7s ease-in-out infinite;white-space:nowrap}
+.chip::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-right:8px;vertical-align:middle}
+.chip:nth-child(2)::before{background:var(--accent2)}
+.chip:nth-child(1){top:22%;right:6%}.chip:nth-child(2){top:38%;right:14%;animation-delay:-2s}
+.chip:nth-child(3){top:54%;right:4%;animation-delay:-4s}.chip:nth-child(4){top:68%;right:18%;animation-delay:-1s}
+.chip:nth-child(5){top:30%;right:28%;animation-delay:-5s}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+@media (max-width:1100px){.chips{display:none}}
+.scroll-hint{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);font-size:12px;color:var(--dim);display:flex;flex-direction:column;align-items:center;gap:8px;z-index:2}
+.scroll-hint::after{content:"";width:1px;height:36px;background:linear-gradient(var(--dim),transparent)}
+
+/* About */
+.about-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:70px;margin-top:50px}
+.about-grid p{color:var(--muted);font-size:17px;margin:0 0 20px}
+.about-grid p b{color:var(--text);font-weight:600}
+blockquote{font-family:var(--serif);font-style:italic;font-size:28px;line-height:1.25;margin:34px 0;padding-left:22px;border-left:2px solid var(--accent)}
+.textlink{color:var(--accent2);font-weight:600;border-bottom:1px solid currentColor;padding-bottom:2px}
+.pillar-list{border-top:1px solid var(--line)}
+.pillar-list div{display:grid;grid-template-columns:1fr auto;gap:6px 20px;padding:22px 0;border-bottom:1px solid var(--line)}
+.pillar-list b{font-weight:600}
+.pillar-list span{color:var(--muted);font-size:14.5px;grid-column:1}
+.pillar-list em{font-family:var(--serif);color:var(--dim);font-size:22px;grid-row:1/3;grid-column:2;align-self:center}
+@media (max-width:860px){.about-grid{grid-template-columns:1fr;gap:40px}}
+
+/* Industries */
+.ind-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:56px}
+.ind{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:40px;display:flex;flex-direction:column}
+.ind .tag{font-size:13px;color:var(--accent2);font-weight:600}
+.ind h3{font-family:var(--serif);font-size:32px;line-height:1.1;margin:12px 0 16px}
+.ind p{color:var(--muted);margin:0 0 22px}
+.ind ul{list-style:none;padding:0;margin:0 0 30px;flex:1}
+.ind li{padding:11px 0 11px 26px;border-top:1px solid var(--line);position:relative;font-size:15px}
+.ind li::before{content:"";position:absolute;left:0;top:19px;width:12px;height:1px;background:var(--accent)}
+@media (max-width:860px){.ind-grid{grid-template-columns:1fr}.ind{padding:28px}}
+
+/* Product */
+.product{display:grid;grid-template-columns:1fr 1.1fr;gap:60px;align-items:center}
+.product h2{font-size:clamp(54px,8vw,96px)}
+.feat-tags{display:flex;flex-wrap:wrap;gap:8px;margin:28px 0 34px}
+.feat-tags span{border:1px solid var(--line2);border-radius:999px;padding:7px 14px;font-size:13.5px;color:var(--muted)}
+.mock{background:linear-gradient(160deg,#101A36,#0A1022);border:1px solid var(--line2);border-radius:24px;padding:18px;box-shadow:0 40px 80px -30px rgba(91,140,255,.35)}
+.mock-top{display:flex;gap:6px;margin-bottom:14px}
+.mock-top i{width:10px;height:10px;border-radius:50%;background:var(--line2)}
+.mock-body{display:grid;grid-template-columns:120px 1fr;gap:14px}
+.mock-side{display:flex;flex-direction:column;gap:8px}
+.mock-side span{height:26px;border-radius:8px;background:rgba(148,170,255,.07)}
+.mock-side span:first-child{background:rgba(91,140,255,.3)}
+.mock-main{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.kpi{background:rgba(148,170,255,.06);border-radius:12px;padding:12px}
+.kpi small{display:block;color:var(--dim);font-size:11px}
+.kpi b{font-size:20px}
+.chart{grid-column:1/-1;height:130px;border-radius:12px;background:rgba(148,170,255,.05);position:relative;overflow:hidden}
+.chart svg{position:absolute;inset:0;width:100%;height:100%}
+.rows{grid-column:1/-1;display:flex;flex-direction:column;gap:7px}
+.rows span{height:22px;border-radius:7px;background:rgba(148,170,255,.05);display:flex;align-items:center;padding:0 10px;gap:8px}
+.rows span::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent2)}
+.rows span::after{content:"";height:5px;border-radius:3px;background:rgba(148,170,255,.18);flex:1;max-width:60%}
+.mock-cap{margin:14px 4px 0;font-size:13px;color:var(--muted)}
+@media (max-width:900px){.product{grid-template-columns:1fr}.mock-body{grid-template-columns:1fr}.mock-side{display:none}}
+
+/* Platform capabilities */
+.cap-grid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line);margin-top:56px}
+.cap{padding:32px 26px 36px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);transition:background .3s}
+.cap:hover{background:rgba(91,140,255,.05)}
+.cap em{font-family:var(--serif);color:var(--dim);font-size:20px}
+.cap h3{font-size:18px;font-weight:600;margin:28px 0 10px}
+.cap p{color:var(--muted);font-size:14.5px;margin:0}
+@media (max-width:960px){.cap-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.cap-grid{grid-template-columns:1fr}}
+
+/* Services */
+.svc{display:grid;grid-template-columns:340px 1fr;gap:40px;margin-top:56px}
+.svc-tabs{display:flex;flex-direction:column;gap:6px}
+.svc-tab{all:unset;cursor:pointer;display:grid;grid-template-columns:34px 1fr auto;align-items:center;gap:6px 10px;padding:16px 18px;border-radius:14px;border:1px solid transparent;transition:background .2s,border-color .2s}
+.svc-tab em{font-family:var(--serif);color:var(--dim);font-size:18px;font-style:normal}
+.svc-tab b{font-weight:600;font-size:15px}
+.svc-tab small{grid-column:2;color:var(--dim);font-size:13px}
+.svc-tab span{grid-row:1/3;grid-column:3;font-size:13px;color:var(--muted);border:1px solid var(--line2);border-radius:999px;padding:2px 10px}
+.svc-tab:hover{background:rgba(148,170,255,.04)}
+.svc-tab[aria-selected="true"]{background:var(--card);border-color:var(--line2)}
+.svc-tab[aria-selected="true"] em{color:var(--accent2)}
+.svc-panel{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:40px}
+.svc-panel h3{font-family:var(--serif);font-size:34px;line-height:1.1}
+.svc-panel .meta{color:var(--accent2);font-size:13px;font-weight:600;margin:8px 0 16px}
+.svc-panel p{color:var(--muted);margin:0 0 26px;max-width:62ch}
+.svc-panel ul{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:1fr 1fr;gap:0 28px}
+.svc-panel li{padding:12px 0;border-top:1px solid var(--line);font-size:15px}
+.models{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:40px}
+.model{border:1px solid var(--line);border-radius:18px;padding:24px}
+.model b{display:block;margin-bottom:8px;font-weight:600}
+.model span{color:var(--muted);font-size:14px}
+@media (max-width:960px){.svc{grid-template-columns:1fr}.svc-tabs{flex-direction:row;overflow-x:auto;padding-bottom:6px}.svc-tab{min-width:240px}.models{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.svc-panel{padding:26px}.svc-panel ul{grid-template-columns:1fr}.models{grid-template-columns:1fr}}
+
+/* Why */
+.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:22px;overflow:hidden;margin-top:56px}
+.why{background:var(--bg);padding:40px}
+.why b{font-family:var(--serif);font-weight:400;font-size:28px;display:block;margin-bottom:12px}
+.why p{margin:0;color:var(--muted)}
+@media (max-width:760px){.why-grid{grid-template-columns:1fr}.why{padding:28px}}
+
+/* Process */
+.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-top:56px;position:relative}
+.step{border-top:2px solid var(--line2);padding-top:24px;position:relative}
+.step::before{content:"";position:absolute;top:-6px;left:0;width:10px;height:10px;border-radius:50%;background:var(--accent)}
+.step .n{font-family:var(--serif);font-size:40px;color:var(--dim);line-height:1}
+.step h3{font-size:19px;font-weight:600;margin:14px 0 10px}
+.step p{color:var(--muted);font-size:14.5px;margin:0 0 14px}
+.step em{font-size:13px;color:var(--accent2);font-style:normal;font-weight:600}
+@media (max-width:960px){.steps{grid-template-columns:1fr 1fr;row-gap:40px}}
+@media (max-width:560px){.steps{grid-template-columns:1fr}}
+
+/* Work */
+.work-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:56px}
+.work{border:1px solid var(--line);border-radius:22px;overflow:hidden;background:var(--card);display:flex;flex-direction:column}
+.work .shot{aspect-ratio:16/10;background:repeating-linear-gradient(135deg,rgba(148,170,255,.05) 0 12px,transparent 12px 24px),linear-gradient(160deg,#111C3A,#0A1022);display:grid;place-items:center;color:var(--dim);font-size:14px;border-bottom:1px solid var(--line)}
+.work .body{padding:24px}
+.work small{color:var(--accent2);font-weight:600;font-size:13px}
+.work h3{font-family:var(--serif);font-size:26px;margin:6px 0 8px}
+.work p{color:var(--muted);font-size:14.5px;margin:0 0 14px}
+.work ul{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:6px}
+.work li{font-size:12.5px;border:1px solid var(--line2);border-radius:999px;padding:3px 10px;color:var(--muted)}
+.work-note{margin-top:32px;color:var(--muted)}
+@media (max-width:960px){.work-grid{grid-template-columns:1fr}}
+
+/* FAQ */
+.faq{display:grid;grid-template-columns:1fr 1.4fr;gap:60px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq details:first-child{border-top:1px solid var(--line)}
+.faq summary{cursor:pointer;list-style:none;padding:24px 40px 24px 0;font-size:18px;font-weight:600;position:relative}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:4px;top:18px;font-size:26px;font-weight:300;color:var(--accent2);transition:transform .3s}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{color:var(--muted);margin:0 0 24px;max-width:64ch}
+@media (max-width:860px){.faq{grid-template-columns:1fr;gap:30px}}
+
+/* CTA */
+.cta-box{text-align:center;border:1px solid var(--line2);border-radius:32px;padding:90px 30px;background:radial-gradient(ellipse at 50% 0%,rgba(91,140,255,.22),transparent 60%),var(--bg2);position:relative;overflow:hidden}
+.cta-box h2{margin:0 auto;max-width:16ch}
+.cta-box .lead{margin:22px auto 36px}
+.cta-box .hero-actions{justify-content:center}
+.cta-points{display:flex;justify-content:center;flex-wrap:wrap;gap:24px;margin-top:34px;color:var(--muted);font-size:14px}
+.cta-points span::before{content:"✓";color:var(--accent2);margin-right:8px}
+
+/* Footer */
+footer{border-top:1px solid var(--line);padding:70px 0 40px;margin-top:40px}
+.foot{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:40px}
+.foot p{color:var(--muted);font-size:14.5px;max-width:34ch}
+.sub{display:flex;gap:8px;margin-top:20px;max-width:360px}
+.sub input{flex:1;min-width:0;background:var(--card);border:1px solid var(--line2);border-radius:999px;padding:11px 16px;color:var(--text);font:inherit;font-size:14px}
+.sub button{background:var(--text);color:var(--bg);border:0;border-radius:999px;padding:0 18px;font:inherit;font-weight:600;font-size:14px;cursor:pointer}
+.foot h4{font-size:14px;margin:0 0 16px;font-weight:600}
+.foot nav{display:flex;flex-direction:column;gap:10px;font-size:14px;color:var(--muted)}
+.foot nav a:hover{color:var(--text)}
+.copy{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-top:60px;padding-top:24px;border-top:1px solid var(--line);color:var(--dim);font-size:13px}
+@media (max-width:860px){.foot{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.foot{grid-template-columns:1fr}section{padding:84px 0}}
+
+/* Animated background */
+#bgfx{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.orbs{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.orbs i{position:absolute;border-radius:50%;filter:blur(110px);opacity:.22}
+.orbs i:nth-child(1){width:520px;height:520px;background:var(--accent);top:10%;left:-10%;animation:drift1 26s ease-in-out infinite}
+.orbs i:nth-child(2){width:460px;height:460px;background:var(--accent2);bottom:-10%;right:-8%;opacity:.14;animation:drift2 32s ease-in-out infinite}
+.orbs i:nth-child(3){width:380px;height:380px;background:#8A5BFF;top:45%;left:40%;opacity:.12;animation:drift3 38s ease-in-out infinite}
+@keyframes drift1{0%,100%{transform:translate(0,0)}50%{transform:translate(40vw,20vh)}}
+@keyframes drift2{0%,100%{transform:translate(0,0)}50%{transform:translate(-35vw,-40vh)}}
+@keyframes drift3{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(-25vw,-20vh) scale(1.2)}66%{transform:translate(20vw,15vh) scale(.9)}}
+.grid-bg{animation:gridmove 20s linear infinite}
+@keyframes gridmove{to{background-position:64px 64px}}
+.scanline{position:absolute;left:0;right:0;height:1px;top:0;background:linear-gradient(90deg,transparent,var(--accent2),transparent);opacity:.5;animation:scan 7s linear infinite;z-index:1}
+@keyframes scan{0%{top:0}100%{top:100%}}
+main,footer{position:relative;z-index:1}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .8s,transform .8s}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal,h1 .w{opacity:1!important;transform:none!important;filter:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<div id="loader" aria-hidden="true">
+  <div class="logo">SWISS TECH</div>
+  <div class="bar"><i id="lbar"></i></div>
+  <small>Initialising <b id="lpct">0%</b></small>
+</div>
+
+<div class="orbs" aria-hidden="true"><i></i><i></i><i></i></div>
+<canvas id="bgfx" aria-hidden="true"></canvas>
+
+<a class="skip" href="#hero">Skip to main content</a>
+
+<header id="top">
+  <div class="wrap nav">
+    <a class="brand" href="#hero" aria-label="Swiss Tech home"><span class="mark"></span>Swiss Tech</a>
+    <nav class="links" aria-label="Primary">
+      <a href="#about">Company</a><a href="#industries">Industries</a><a href="#product">Product</a><a href="#ai">Platform</a><a href="#services">Services</a><a href="#work">Our work</a><a href="#process">Process</a><a href="#faq">FAQ</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="contact" href="#contact">Contact</a>
+      <a class="btn btn-primary" href="#cta">Book a Demo</a>
+      <button class="burger" id="burger" aria-expanded="false" aria-controls="mmenu" aria-label="Open menu">☰</button>
+    </div>
+  </div>
+  <nav class="mobile-menu" id="mmenu" aria-label="Mobile">
+    <a href="#about">Company</a><a href="#industries">Industries</a><a href="#product">Product</a><a href="#ai">Platform</a><a href="#services">Services</a><a href="#work">Our work</a><a href="#process">Process</a><a href="#faq">FAQ</a><a href="#cta">Book a Demo</a>
+  </nav>
+</header>
+
+<main>
+<!-- HERO -->
+<section id="hero">
+  <div class="grid-bg"></div><div class="scanline"></div><div class="glow a"></div><div class="glow b"></div>
+  <div class="chips" aria-hidden="true">
+    <span class="chip">Vitals stream · 12ms</span>
+    <span class="chip">Fleet ETA recalculated</span>
+    <span class="chip">Slot auto-filled</span>
+    <span class="chip">Route optimised −18%</span>
+    <span class="chip">Triage confidence 0.94</span>
+  </div>
+  <div class="wrap hero-inner">
+    <div class="live"><b>Live</b> Swiss Tech Intelligence Platform</div>
+    <h1 id="h1"><span class="w it">Transform</span> <span class="w">Healthcare</span> <span class="w">&amp;</span> <span class="w">Logistics</span> <span class="w">with</span> <span class="w it">Intelligent</span> <span class="w">AI</span> <span class="w">Solutions</span></h1>
+    <p class="hero-sub">Building next-generation software powered by artificial intelligence for clinics, healthcare providers, logistics companies, and enterprises.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="#cta">Get Started</a>
+      <a class="btn btn-ghost" href="#cta">Book a Demo</a>
+    </div>
+    <ul class="pillars">
+      <li><b>Healthcare &amp; Logistics</b>Two industries, deeply</li>
+      <li><b>AI at the core</b>Not a feature bolted on</li>
+      <li><b>Cloud-native</b>Built for scale</li>
+      <li><b>Arabic &amp; English</b>Right-to-left from day one</li>
+    </ul>
+  </div>
+  <div class="scroll-hint">Scroll</div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="wrap">
+    <div class="kicker">The company</div>
+    <h2 class="reveal">We build the intelligence layer for industries that cannot afford to guess.</h2>
+    <div class="about-grid">
+      <div class="reveal">
+        <p>Swiss Tech builds intelligent software for two industries where a delayed decision has a physical cost: a patient waiting on a diagnosis, and a shipment waiting on a dock. Both run on the same raw material — <b>fragmented operational data</b> — and both have been served for decades by software that only records what already happened.</p>
+        <p>We start from the opposite end. Every Swiss Tech product is designed around a model that reads the operation continuously, surfaces what deserves attention, and takes the routine work off the people doing the skilled work. <b>Enterprise-grade</b> in the ways that actually matter: auditable, isolated per tenant, and answerable at 3am.</p>
+        <blockquote>Software should arrive at a decision before the person needing it has to ask for one.</blockquote>
+        <a class="textlink" href="#industries">See how it works in practice</a>
+      </div>
+      <div class="pillar-list reveal">
+        <div><b>Artificial Intelligence</b><span>Domain-tuned models for triage, demand and anomaly detection.</span><em>01</em></div>
+        <div><b>Automation</b><span>Rules and agents that clear the queue before anyone opens it.</span><em>02</em></div>
+        <div><b>Cloud Infrastructure</b><span>Multi-region, tenant-isolated, zero-downtime deployment.</span><em>03</em></div>
+        <div><b>Analytics</b><span>Operational truth in one place, not eleven exported spreadsheets.</span><em>04</em></div>
+        <div><b>Enterprise Solutions</b><span>Role-based access, full audit trail, on-prem where required.</span><em>05</em></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INDUSTRIES -->
+<section id="industries">
+  <div class="wrap">
+    <div class="kicker">Where we work</div>
+    <h2 class="reveal">Two industries. One intelligence layer.</h2>
+    <p class="lead reveal">The models differ. The discipline doesn't — real-time ingestion, explainable output, and an audit trail that survives a regulator.</p>
+    <div class="ind-grid">
+      <article class="ind reveal">
+        <span class="tag">Healthcare</span>
+        <h3>Clinics, medical centres and multi-site providers</h3>
+        <p>Every clinical minute lost to admin is a minute not spent with a patient. Swiss Tech collapses records, scheduling and reporting into one system that reasons about the day ahead instead of just logging the day behind.</p>
+        <ul><li>Unified patient record across every site and specialty</li><li>Predictive no-show scoring that refills slots automatically</li><li>Clinical document OCR with structured field extraction</li><li>Regulator-ready audit trail on every read and write</li></ul>
+        <a class="textlink" href="#product">Explore the product</a>
+      </article>
+      <article class="ind reveal">
+        <span class="tag">Logistics</span>
+        <h3>Freight operators, 3PLs and distribution networks</h3>
+        <p>A network is only as good as its worst-informed decision. Swiss Tech models demand, capacity and exception risk together, so dispatchers act on a forecast rather than a phone call.</p>
+        <ul><li>Live route optimisation across fleet, load and time window</li><li>Demand forecasting down to lane and SKU</li><li>Exception detection before the delay becomes a claim</li><li>Warehouse throughput analytics with dock-level detail</li></ul>
+        <a class="textlink" href="#cta">Talk to the logistics team</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCT -->
+<section id="product">
+  <div class="wrap product">
+    <div class="reveal">
+      <div class="kicker">Flagship product</div>
+      <h2>Swiss Care</h2>
+      <p class="lead">A complete AI-powered clinic management platform. Patient records, scheduling, electronic files and reporting in one system — with a model watching the whole operation and telling you what needs attention before the waiting room does.</p>
+      <div class="feat-tags"><span>Patient Management</span><span>Appointment Booking</span><span>Medical Records</span><span>Clinic Dashboard</span><span>AI Assistant</span><span>Reports</span><span>Notifications</span><span>Doctor Scheduling</span></div>
+      <a class="btn btn-primary" href="#cta">See it live</a>
+    </div>
+    <figure class="mock reveal" style="margin:0" aria-label="Illustrative dashboard preview">
+      <div class="mock-top"><i></i><i></i><i></i></div>
+      <div class="mock-body">
+        <div class="mock-side"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="mock-main">
+          <div class="kpi"><small>Today</small><b>48</b></div>
+          <div class="kpi"><small>Waiting</small><b>6</b></div>
+          <div class="kpi"><small>No-show risk</small><b>3</b></div>
+          <div class="chart"><svg viewBox="0 0 300 130" preserveAspectRatio="none"><defs><linearGradient id="g" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#5B8CFF" stop-opacity=".45"/><stop offset="1" stop-color="#5B8CFF" stop-opacity="0"/></linearGradient></defs><path d="M0 100 C30 90 50 60 80 70 S130 40 160 50 S210 20 240 35 S280 15 300 20 V130 H0Z" fill="url(#g)"/><path d="M0 100 C30 90 50 60 80 70 S130 40 160 50 S210 20 240 35 S280 15 300 20" fill="none" stroke="#5B8CFF" stroke-width="2"/></svg></div>
+          <div class="rows"><span></span><span></span><span></span></div>
+        </div>
+      </div>
+      <figcaption class="mock-cap">Replace this preview with a real product screenshot.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- PLATFORM -->
+<section id="ai">
+  <div class="wrap">
+    <div class="kicker">The platform</div>
+    <h2 class="reveal">Eight capabilities, one runtime.</h2>
+    <p class="lead reveal">Every Swiss Tech product is assembled from the same intelligence primitives — which is why a logistics deployment inherits improvements shipped for a clinic.</p>
+    <div class="cap-grid">
+      <div class="cap"><em>01</em><h3>Predictive Analytics</h3><p>Forecast demand, no-shows, capacity and exception risk from your own operational history.</p></div>
+      <div class="cap"><em>02</em><h3>Workflow Automation</h3><p>Multi-step processes that run to completion unattended and escalate only real exceptions.</p></div>
+      <div class="cap"><em>03</em><h3>AI Chat Assistant</h3><p>Grounded in your records. Answers with a citation, drafts the follow-up, never invents a value.</p></div>
+      <div class="cap"><em>04</em><h3>Smart Search</h3><p>Semantic retrieval across records, files and notes — "chest pain, last quarter, unresolved".</p></div>
+      <div class="cap"><em>05</em><h3>Document OCR</h3><p>Scans, faxes and handwritten forms parsed into structured fields with confidence scores.</p></div>
+      <div class="cap"><em>06</em><h3>Voice Commands</h3><p>Hands-free capture and navigation for clinicians mid-consult and drivers mid-route.</p></div>
+      <div class="cap"><em>07</em><h3>Real-time Monitoring</h3><p>Sub-second telemetry with anomaly alerts routed to whoever can actually act on them.</p></div>
+      <div class="cap"><em>08</em><h3>Machine Learning</h3><p>Models retrained on your tenant's data, versioned, and rolled back like any other release.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="wrap">
+    <div class="kicker">Capabilities</div>
+    <h2 class="reveal">Everything between the idea and production.</h2>
+    <p class="lead reveal">The AI is what we are known for. It only works because we also own the cloud beneath it, the data feeding it, the interface around it and the compliance wrapped over it — sixty-two services across six layers, delivered by one accountable team.</p>
+    <div class="svc">
+      <div class="svc-tabs" role="tablist" id="svcTabs"></div>
+      <div class="svc-panel" role="tabpanel" id="svcPanel" aria-live="polite"></div>
+    </div>
+    <div class="models">
+      <div class="model"><b>Fixed-Scope Project</b><span>A defined deliverable at a fixed price, quoted after discovery rather than before it.</span></div>
+      <div class="model"><b>Dedicated Team</b><span>An embedded Swiss Tech squad working to your roadmap and your standups.</span></div>
+      <div class="model"><b>Staff Augmentation</b><span>Named specialists filling one specific gap in a team you already have.</span></div>
+      <div class="model"><b>Managed Service</b><span>We run it — monitoring, updates and SLA cover on a monthly retainer.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section id="why">
+  <div class="wrap">
+    <div class="kicker">Why Swiss Tech</div>
+    <h2 class="reveal">Built by people who have been on call.</h2>
+    <p class="lead reveal">Enterprise AI fails in predictable ways: unexplainable output, brittle integrations, and a pilot that never reaches production. We designed around each of those failure modes deliberately.</p>
+    <div class="why-grid">
+      <div class="why"><b>Explainable by default</b><p>Every prediction ships with the features that drove it. Clinicians and dispatchers can disagree with the model — and record why.</p></div>
+      <div class="why"><b>Integrates with what you already run</b><p>HL7 and FHIR for clinical systems, EDI and REST for freight. No rip-and-replace, no eighteen-month migration.</p></div>
+      <div class="why"><b>Production in weeks, not quarters</b><p>A scoped deployment reaches live users inside six weeks. Pilots that cannot reach production are not pilots.</p></div>
+      <div class="why"><b>Answerable at 3am</b><p>Named engineers, a real escalation path, and a status page that reflects reality rather than marketing.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="wrap">
+    <div class="kicker">Engagement</div>
+    <h2 class="reveal">Five stages, sequenced deliberately.</h2>
+    <p class="lead reveal">Each stage has an exit condition. We do not move to the next one until it is met — which is the only reason the six-week number holds.</p>
+    <div class="steps">
+      <div class="step reveal"><div class="n">01</div><h3>Discover</h3><p>Shadow the operation. Map the data, the workarounds, and the decisions that actually cost money.</p><em>Week 1</em></div>
+      <div class="step reveal"><div class="n">02</div><h3>Design</h3><p>Interface and model design in parallel, validated against the people who will use it daily.</p><em>Week 2</em></div>
+      <div class="step reveal"><div class="n">03</div><h3>Develop</h3><p>Weekly builds on your real data in an isolated environment. No demo datasets.</p><em>Weeks 3–5</em></div>
+      <div class="step reveal"><div class="n">04</div><h3>Deploy</h3><p>Staged rollout with a live fallback path, full audit logging, and staff training.</p><em>Week 6</em></div>
+      <div class="step reveal"><div class="n">05</div><h3>Scale</h3><p>New sites, new models, continuous retraining — measured against the baseline we captured on day one.</p><em>Ongoing</em></div>
+    </div>
+  </div>
+</section>
+
+<!-- WORK -->
+<section id="work">
+  <div class="wrap">
+    <div class="kicker">Our work</div>
+    <h2 class="reveal">Live sites you can open right now.</h2>
+    <p class="lead reveal">A selection of projects we have shipped. Add your own screenshots, titles and links to each card below.</p>
+    <div class="work-grid">
+      <article class="work reveal"><div class="shot">Project screenshot</div><div class="body"><small>Category · City</small><h3>Project name</h3><p>Short description of the project and what it delivers for the client.</p><ul><li>Feature one</li><li>Feature two</li><li>Feature three</li></ul></div></article>
+      <article class="work reveal"><div class="shot">Project screenshot</div><div class="body"><small>Category · City</small><h3>Project name</h3><p>Short description of the project and what it delivers for the client.</p><ul><li>Feature one</li><li>Feature two</li><li>Feature three</li></ul></div></article>
+      <article class="work reveal"><div class="shot">Project screenshot</div><div class="body"><small>Category · City</small><h3>Project name</h3><p>Short description of the project and what it delivers for the client.</p><ul><li>Feature one</li><li>Feature two</li><li>Feature three</li></ul></div></article>
+    </div>
+    <p class="work-note">Want something similar? <a class="textlink" href="#contact">Get in touch</a> and we will send you examples to look through first.</p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="wrap faq">
+    <div>
+      <div class="kicker">Questions</div>
+      <h2 class="reveal">The things procurement asks first.</h2>
+      <p class="lead">If yours isn't here, ask it directly — you'll get an engineer, not a form response.</p>
+      <p style="margin-top:28px"><a class="btn btn-ghost" href="#contact">Ask a question</a></p>
+    </div>
+    <div>
+      <details><summary>How long does a deployment actually take?</summary><p>A scoped single-site deployment reaches live users in six weeks: one week discovery, one week design, three weeks build on your own data, one week staged rollout. Multi-site and custom integration work extends the build phase, not the others — we'll give you the honest number after discovery, not before it.</p></details>
+      <details><summary>Where does our data live, and who can see it?</summary><p>Each tenant gets an isolated data store in the region you nominate. Encryption in transit and at rest, role-based access with least privilege, and a full audit trail on every read and write. Our engineers require a time-boxed, logged elevation to access production data, and you can require your own approval on that. On-premise deployment is available where regulation demands it.</p></details>
+      <details><summary>Is our data used to train models for other customers?</summary><p>No. Tenant data trains tenant models only. Architectural improvements are shared across deployments; your data is not. This is contractual, not a policy we can quietly revise.</p></details>
+      <details><summary>Can it integrate with the system we already have?</summary><p>Healthcare: HL7 v2, FHIR R4, DICOM metadata, and flat-file import for older systems. Logistics: EDI X12/EDIFACT, REST and webhook ingestion, plus direct telematics feeds. Where no interface exists we build an adapter during the develop phase — that scope is priced in discovery, never discovered late.</p></details>
+      <details><summary>What happens when the AI is wrong?</summary><p>Every prediction is a recommendation with a confidence score and the features behind it — a human always holds the decision. Overrides are captured as training signal, so disagreement improves the model rather than being discarded. No clinical or dispatch action executes autonomously unless you explicitly configure it to.</p></details>
+      <details><summary>How is it priced?</summary><p>An annual platform fee by deployment scale, plus per-seat licensing for clinical and operational users. Integration and custom model work are quoted once after discovery — fixed, not time-and-materials. No usage-based inference billing, because unpredictable bills make people avoid using the product.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="wrap">
+    <div class="cta-box reveal" id="contact">
+      <div class="kicker" style="justify-content:center">Next step</div>
+      <h2>Book your free demo.</h2>
+      <p class="lead">Forty-five minutes with a Swiss Tech engineer, using a dataset shaped like yours. You'll leave with a scoped deployment estimate — whether or not you go ahead.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="mailto:info@swisstech.com?subject=Demo%20request">Book a Demo</a>
+        <a class="btn btn-ghost" href="#product">Explore the product</a>
+      </div>
+      <div class="cta-points"><span>No sales script</span><span>Engineer on the call</span><span>Estimate in writing</span></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <a class="brand" href="#hero"><span class="mark"></span>Swiss Tech</a>
+        <p>Intelligent software for healthcare and logistics. Built to be explainable, integrated, and answerable.</p>
+        <form class="sub" onsubmit="event.preventDefault();this.querySelector('button').textContent='Subscribed';this.reset();">
+          <label for="em" style="position:absolute;left:-999px">Email address</label>
+          <input id="em" type="email" required placeholder="Email address">
+          <button type="submit">Subscribe</button>
+        </form>
+      </div>
+      <div><h4>Products</h4><nav><a href="#product">Swiss Care</a><a href="#ai">Intelligence Platform</a><a href="#industries">Logistics Suite</a><a href="#ai">Analytics</a></nav></div>
+      <div><h4>Company</h4><nav><a href="#services">Services</a><a href="#about">About</a><a href="#why">Why Swiss Tech</a><a href="#process">Process</a><a href="#work">Our work</a></nav></div>
+      <div><h4>Contact</h4><nav><a href="mailto:info@swisstech.com">info@swisstech.com</a><a href="mailto:info@swisstech.com?subject=Security%20disclosure">Report a security issue</a><a href="#cta">Book a demo</a><a href="#faq">Support &amp; FAQ</a></nav></div>
+    </div>
+    <div class="copy"><span>© 2026 Swiss Tech. All rights reserved.</span><span>Privacy · Terms · Security</span></div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // Loader
+  var p=0,bar=document.getElementById('lbar'),pct=document.getElementById('lpct'),loader=document.getElementById('loader');
+  var t=setInterval(function(){
+    p=Math.min(100,p+Math.ceil(Math.random()*14));
+    bar.style.width=p+'%';pct.textContent=p+'%';
+    if(p>=100){clearInterval(t);setTimeout(function(){loader.classList.add('done');heroIn();},250);}
+  },70);
+  function heroIn(){document.querySelectorAll('#h1 .w').forEach(function(w,i){setTimeout(function(){w.classList.add('in')},i*90)});}
+
+  // Header
+  var hd=document.getElementById('top');
+  function onScroll(){hd.classList.toggle('scrolled',window.scrollY>20)}
+  window.addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+  // Mobile menu
+  var b=document.getElementById('burger'),m=document.getElementById('mmenu');
+  b.addEventListener('click',function(){var o=m.classList.toggle('open');b.setAttribute('aria-expanded',o);b.textContent=o?'✕':'☰'});
+  m.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){m.classList.remove('open');b.setAttribute('aria-expanded','false');b.textContent='☰'})});
+
+  // Reveal
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
+    document.querySelectorAll('.reveal').forEach(function(el){io.observe(el)});
+  } else document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in')});
+
+  // Services
+  var S=[
+    ['Cloud & Platform','The ground everything runs on','Cloud & Platform Engineering','Architecture, migration and the operational discipline to actually run it. AWS, Azure and GCP — or on-premise where regulation requires it, through the same deployment pipeline either way.',['Cloud Architecture (AWS · Azure · GCP)','Cloud Migration & Replatforming','Kubernetes & Containerisation','Infrastructure as Code','CI/CD Pipelines','Observability & SRE Practice','Multi-Region High Availability','Disaster Recovery & Backup','On-Premise & Hybrid Deployment','Cloud Cost Optimisation']],
+    ['Data & Analytics','One queryable truth','Data Engineering & Analytics','Most enterprises do not have a data problem — they have eleven systems that disagree. We consolidate, model and govern, so every report downstream starts from the same number.',['Data Pipelines (ETL / ELT)','Warehouses & Lakehouses','Real-time Streaming','Master Data Management','BI Dashboards & Reporting','Data Governance & Lineage','Legacy Data Migration','Data Quality Automation','Interoperability (HL7 · FHIR · EDI)']],
+    ['AI & Automation','Decisions, not dashboards','Artificial Intelligence & Automation','Models tuned to your domain and deployed into the workflow rather than into a separate dashboard nobody opens. Every prediction is explainable, versioned and monitored in production.',['Custom Machine Learning Models','Predictive Analytics & Forecasting','Computer Vision','OCR & Document Understanding','NLP & Text Classification','LLM & RAG Systems','Conversational AI & Chatbots','Speech Recognition & Voice UI','Anomaly & Fraud Detection','Recommendation Engines','Robotic Process Automation','MLOps & Model Monitoring']],
+    ['Software Development','The systems opened every morning','Software & Application Development','Web, mobile, desktop and embedded — plus the industry systems we specialise in. Written to be handed over: documented, tested, and yours to maintain if you ever want to.',['Custom Web Applications','Mobile Apps (iOS · Android · Flutter)','Progressive Web Apps','Desktop Applications','API Design & Development','Microservices Architecture','ERP & CRM Implementation','Clinic & Hospital Systems (EMR · HIS)','Warehouse & Transport (WMS · TMS)','Customer & Partner Portals','Payments & Billing Integration','IoT & Telematics','Legacy Modernisation']],
+    ['Product Design','No training required','Product Design & Experience','Enterprise software is used under pressure by people who did not choose it. We design for that reality: fewer clicks, clearer state, and accessibility treated as a requirement rather than a retrofit.',['UX Research & Discovery','UI Design','Design Systems & Component Libraries','Interaction & Motion Design','Rapid Prototyping','Accessibility (WCAG 2.2)','Usability Audits','Technical Documentation']],
+    ['Security & Operations','What keeps it standing','Security, Quality & Operations','Security architecture, certification support and the operational cover that starts the day after go-live. Named engineers, a real escalation path, and SLAs written as numbers.',['Security Architecture & Threat Modelling','Penetration Testing','Compliance (HIPAA · GDPR · ISO 27001)','Identity & Access (SSO · RBAC)','Encryption & Key Management','Audit Logging & Traceability','QA & Test Automation','Performance & Load Testing','24/7 Monitoring & Incident Response','SLA-Backed Maintenance']]
+  ];
+  var tabs=document.getElementById('svcTabs'),panel=document.getElementById('svcPanel');
+  function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+  S.forEach(function(s,i){
+    var bt=document.createElement('button');bt.className='svc-tab';bt.setAttribute('role','tab');
+    bt.innerHTML='<em>0'+(i+1)+'</em><b>'+esc(s[0])+'</b><small>'+esc(s[1])+'</small><span>'+s[4].length+'</span>';
+    bt.addEventListener('click',function(){show(i)});tabs.appendChild(bt);
+  });
+  function show(i){
+    var s=S[i];
+    tabs.querySelectorAll('.svc-tab').forEach(function(t,j){t.setAttribute('aria-selected',j===i)});
+    panel.innerHTML='<h3>'+esc(s[2])+'</h3><div class="meta">Layer 0'+(i+1)+' · '+s[4].length+' services</div><p>'+esc(s[3])+'</p><ul>'+s[4].map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul>';
+  }
+  show(0);
+
+  // Particle network background
+  var cv=document.getElementById('bgfx'),ctx=cv.getContext('2d');
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var W,H,DPR,pts=[],mouse={x:-9999,y:-9999},pulses=[];
+  function size(){
+    DPR=Math.min(window.devicePixelRatio||1,2);
+    W=window.innerWidth;H=window.innerHeight;
+    cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);
+    var n=Math.round(Math.min(90,W*H/16000));
+    pts=[];for(var i=0;i<n;i++)pts.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.35,r:Math.random()*1.6+.6,c:Math.random()<.3?'53,224,194':'91,140,255'});
+  }
+  window.addEventListener('resize',size);
+  window.addEventListener('mousemove',function(e){mouse.x=e.clientX;mouse.y=e.clientY});
+  window.addEventListener('mouseout',function(){mouse.x=mouse.y=-9999});
+  size();
+  var LINK=140;
+  function frame(){
+    ctx.clearRect(0,0,W,H);
+    var sy=window.scrollY*0.15;
+    for(var i=0;i<pts.length;i++){
+      var p=pts[i];
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0||p.x>W)p.vx*=-1;
+      if(p.y<0||p.y>H)p.vy*=-1;
+      var dx=p.x-mouse.x,dy=p.y-mouse.y,d=Math.sqrt(dx*dx+dy*dy);
+      if(d<120){p.x+=dx/d*1.2;p.y+=dy/d*1.2}
+    }
+    for(i=0;i<pts.length;i++){
+      for(var j=i+1;j<pts.length;j++){
+        var a=pts[i],b=pts[j],ddx=a.x-b.x,ddy=a.y-b.y,dd=ddx*ddx+ddy*ddy;
+        if(dd<LINK*LINK){
+          var o=(1-Math.sqrt(dd)/LINK)*.35;
+          ctx.strokeStyle='rgba(120,150,255,'+o+')';ctx.lineWidth=.7;
+          ctx.beginPath();ctx.moveTo(a.x,(a.y-sy%H+H)%H);ctx.lineTo(b.x,(b.y-sy%H+H)%H);
+          // avoid wrap artefacts
+          if(Math.abs(((a.y-sy%H+H)%H)-((b.y-sy%H+H)%H))<LINK)ctx.stroke();
+        }
+      }
+      // mouse links
+      var mx=pts[i].x-mouse.x,my=((pts[i].y-sy%H+H)%H)-mouse.y,md=mx*mx+my*my;
+      if(md<180*180){ctx.strokeStyle='rgba(53,224,194,'+(1-Math.sqrt(md)/180)*.5+')';ctx.beginPath();ctx.moveTo(pts[i].x,(pts[i].y-sy%H+H)%H);ctx.lineTo(mouse.x,mouse.y);ctx.stroke()}
+    }
+    for(i=0;i<pts.length;i++){
+      var q=pts[i],y=(q.y-sy%H+H)%H;
+      ctx.fillStyle='rgba('+q.c+',.9)';ctx.beginPath();ctx.arc(q.x,y,q.r,0,Math.PI*2);ctx.fill();
+    }
+    // data pulses travelling between nodes
+    if(Math.random()<.04&&pts.length>2){
+      var s=pts[Math.floor(Math.random()*pts.length)],best=null,bd=1e9;
+      pts.forEach(function(t){if(t===s)return;var e=(t.x-s.x)**2+(t.y-s.y)**2;if(e<bd&&e<LINK*LINK){bd=e;best=t}});
+      if(best)pulses.push({a:s,b:best,t:0});
+    }
+    pulses=pulses.filter(function(u){
+      u.t+=.02;if(u.t>1)return false;
+      var x=u.a.x+(u.b.x-u.a.x)*u.t,yy=u.a.y+(u.b.y-u.a.y)*u.t;yy=(yy-sy%H+H)%H;
+      var g=ctx.createRadialGradient(x,yy,0,x,yy,8);g.addColorStop(0,'rgba(53,224,194,.95)');g.addColorStop(1,'rgba(53,224,194,0)');
+      ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,yy,8,0,Math.PI*2);ctx.fill();return true;
+    });
+    if(!reduce)requestAnimationFrame(frame);
+  }
+  frame();
+})();
+</script>
+</body>
+</html>
